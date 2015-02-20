@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
+    }
+}
+
+apply plugin: 'spring-boot'
+
+
+jar {
+    into('static') {
+        from('src/main/webapp')
+    }
+    baseName = 'todojug'
+}
+
+dependencies {
+    compile project(":model")
+    compile project(":repository")
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web")
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    // end::actuator[]
+
+}

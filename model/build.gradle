@@ -1,0 +1,7 @@
+apply plugin: 'groovy'
+
+
+dependencies {
+    compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.0.Final'
+    compile "org.codehaus.groovy:groovy-all:2.1.5"
+}

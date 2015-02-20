@@ -1,0 +1,6 @@
+rootProject.name = 'todo-jug'
+
+include 'model'
+include 'repository'
+include 'service'
+

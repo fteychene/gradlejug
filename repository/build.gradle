@@ -1,0 +1,54 @@
+/*
+Manual integrationTest
+
+
+configurations {
+    integrationCompile.extendsFrom(testCompile)
+    integrationRuntime
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDir file('src/integration/java')
+        resources.srcDir file('src/integration/resources')
+        compileClasspath = sourceSets.main.output + configurations.integrationCompile
+        runtimeClasspath = output + compileClasspath +  configurations.integrationRuntime
+    }
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs the integration tests.'
+    group = 'verification'
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    reports.junitXml.destination = file("$reports.junitXml.destination/integration")
+}
+
+check.dependsOn integrationTest
+compileIntegrationTestJava.dependsOn test
+
+dependencies {
+    integrationCompile 'com.h2database:h2:1.4.185'
+}
+
+*/
+
+configurations {
+    integrationCompile.extendsFrom(testCompile)
+}
+
+dependencies {
+    integrationRuntime 'com.h2database:h2:1.4.185'
+    integrationRuntime 'org.apache.derby:derby:10.11.1.1'
+}
+
+dependencies {
+    compile project(':model')
+    compile 'org.springframework.data:spring-data-jpa:1.7.2.RELEASE'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '4.1.4.Final'
+    compile group: 'org.hsqldb', name: 'hsqldb', version: '2.2.8'
+
+    testCompile 'org.springframework:spring-test:4.0.4.RELEASE'
+    testCompile 'org.mockito:mockito-all:1.8.4'
+    testCompile 'com.ninja-squad:DbSetup:1.3.1'
+}
