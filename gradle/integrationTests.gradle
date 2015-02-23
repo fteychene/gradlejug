@@ -17,8 +17,14 @@ task integrationTest(type: Test) {
     group = 'verification'
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
-    reports.junitXml.destination = file("$reports.junitXml.destination/integration")
+    //reports.junitXml.destination = file("$reports.junitXml.destination/integration")
+    reports.html.destination = file("$reports.html.destination/../integration")
+
+    // listen to events in the test execution lifecycle
+    beforeTest { descriptor ->
+        logger.lifecycle("Running integration test: " + descriptor)
+    }
 }
 
 check.dependsOn integrationTest
-compileIntegrationTestJava.dependsOn test
+compileIntegrationTestJava.mustRunAfter test
