@@ -1,0 +1,17 @@
+/*
+    Libraries management
+ */
+
+ext {
+
+    junitVersion = "4.11"
+
+    libraries = [
+            guava : [ group: 'com.google.guava',  name: 'guava', version: '18.0' ],
+            junit : "junit:junit:${junitVersion}",
+
+            h2 : "com.h2database:h2:1.4.185",
+            derby : "org.apache.derby:derby:10.11.1.1"
+
+    ]
+}
