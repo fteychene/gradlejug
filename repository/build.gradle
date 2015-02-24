@@ -38,8 +38,8 @@ configurations {
 }
 
 dependencies {
-    integrationRuntime 'com.h2database:h2:1.4.185'
-    integrationRuntime 'org.apache.derby:derby:10.11.1.1'
+    integrationRuntime libraries.h2
+    integrationRuntime libraries.derby
 }
 
 dependencies {
