@@ -1,0 +1,35 @@
+
+task task4 () {
+	onlyIf { Task task ->
+        task.actions.size() == 3
+    }
+} << {
+	 println "Coucou"
+	
+}
+
+task4.doFirst {
+	println("First action of $it.name")
+}
+
+task4.doLast {
+	println("Last action of $it.name")
+}
+
+task task1 << {
+   println "Hello"
+}
+
+task task2 << {
+   println "World"
+}
+
+task task3(dependsOn: 'task3dependency') << {
+   println "MRQBert"
+}
+
+task task3dependency << {
+   println "MR"
+}
+
+task tests(dependsOn: ['task4', 'task1', 'task2', 'task3'])
