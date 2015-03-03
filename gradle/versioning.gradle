@@ -11,5 +11,5 @@ ext {
             projectVersions."${project}" = globalVersion
         }
     }
-    projectVersions.each() { key, value -> println "${key} == ${value.getProjectVersion()}" };
+    //projectVersions.each() { key, value -> println "${key} == ${value.getProjectVersion()}" };
 }

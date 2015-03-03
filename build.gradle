@@ -1,12 +1,20 @@
 apply from: "$rootDir/gradle/versioning.gradle"
-apply from: './libraries.gradle'
+apply from: "./libraries.gradle"
 
-subprojects {
+
+subprojects { subProject ->
     apply plugin: 'java'
     apply from: "$rootDir/gradle/integrationTests.gradle"
 
+    apply plugin: 'maven-publish'
+    apply plugin: 'checkstyle'
+    apply plugin: 'build-dashboard'
+    apply plugin: 'project-report'
+
+    defaultTasks 'build'
+
     sourceCompatibility = 1.8
-    version = rootProject.projectVersions."${project}".getProjectVersion()
+    version = rootProject.projectVersions."${subProject}".getProjectVersion()
 
     repositories {
         mavenCentral()
@@ -17,10 +25,17 @@ subprojects {
         testCompile libraries.junit
     }
 
-    est {
+    test {
         beforeTest { descriptor ->
             logger.lifecycle("Running test: " + descriptor)
         }
+    }
+
+    checkstyle {
+        sourceSets = [subProject.sourceSets.main]
+        configFile = rootProject.file('shared/config/checkstyle/checkstyle.xml')
+        showViolations = false
+        ignoreFailures = true
     }
 }
 

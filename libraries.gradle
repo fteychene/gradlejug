@@ -7,11 +7,18 @@ ext {
     junitVersion = "4.11"
 
     libraries = [
-            guava : [ group: 'com.google.guava',  name: 'guava', version: '18.0' ],
-            junit : "junit:junit:${junitVersion}",
+            guava      : [group: 'com.google.guava', name: 'guava', version: '18.0'],
+            junit      : "junit:junit:${junitVersion}",
 
-            h2 : "com.h2database:h2:1.4.185",
-            derby : "org.apache.derby:derby:10.11.1.1"
+            h2         : "com.h2database:h2:1.4.185",
+            derby      : "org.apache.derby:derby:10.11.1.1",
 
+            spring_data: "org.springframework.data:spring-data-jpa:1.7.2.RELEASE",
+            hibernate  : [group: 'org.hibernate', name: 'hibernate-entitymanager', version: '4.1.4.Final'],
+            hsqldb     : [group: 'org.hsqldb', name: 'hsqldb', version: '2.2.8'],
+
+            spring_test: 'org.springframework:spring-test:4.0.4.RELEASE',
+            mockito    : 'org.mockito:mockito-all:1.8.4',
+            dbSetup    : 'com.ninja-squad:DbSetup:1.3.1'
     ]
 }
