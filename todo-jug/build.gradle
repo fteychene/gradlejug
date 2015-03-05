@@ -4,6 +4,7 @@ apply from: "./libraries.gradle"
 
 subprojects { subProject ->
     apply plugin: 'java'
+    apply plugin: fr.fteychene.gradlejug.buildsrc.version.BuildVersionPlugin
     apply from: "$rootDir/gradle/integrationTests.gradle"
 
     apply plugin: 'maven-publish'
@@ -14,7 +15,12 @@ subprojects { subProject ->
     defaultTasks 'build'
 
     sourceCompatibility = 1.8
-    version = rootProject.projectVersions."${subProject}".getProjectVersion()
+
+    buildVersion {
+        defaultVersion = "1.0.0"
+    }
+
+    version = buildVersion.version
 
     repositories {
         mavenCentral()
@@ -38,6 +44,12 @@ subprojects { subProject ->
         ignoreFailures = true
     }
 }
+
+//gradle.taskGraph.whenReady {taskGraph ->
+//    if (taskGraph.hasTask(release)) {
+//        projectVersions.release = true
+//    }
+//}
 
 
 task wrapper(type: Wrapper) {

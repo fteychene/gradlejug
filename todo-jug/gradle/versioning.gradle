@@ -1,15 +1,13 @@
-import fr.fteychene.gradlejug.buildsrc.version.ProjectVersion
-
 ext {
-    globalVersion = new ProjectVersion("1.0", System.env.BUILD_NUMBER)
-
-    projectVersions = [:]
-    subprojects {
-        if (rootProject.hasProperty("${project.name}Version")) {
-            projectVersions."${project}" = new ProjectVersion(rootProject."${project.name}Version", System.env.BUILD_NUMBER)
-        } else {
-            projectVersions."${project}" = globalVersion
-        }
-    }
+//    globalVersion = ""
+//
+//    projectVersions = [:]
+//    subprojects {
+//        if (rootProject.hasProperty("${project.name}Version")) {
+//            projectVersions."${project}" = "${project.name}Version"
+//        } else {
+//            projectVersions."${project}" = globalVersion
+//        }
+//    }
     //projectVersions.each() { key, value -> println "${key} == ${value.getProjectVersion()}" };
 }
