@@ -1,7 +1,8 @@
-package fr.fteychene.gradlejug.web.controller;
+package fr.fteychene.gradlejug.service.controller;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import fr.fteychene.gradejug.service.TodoItemService;
 import fr.fteychene.gradlejug.model.TodoItem;
 import fr.fteychene.gradlejug.repository.dao.TodoItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,13 @@ import java.util.List;
 public class TodoController {
 
     @Autowired
-    private TodoItemRepository todoItemRepository;
+    private TodoItemService todoItemService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<TodoItem> findAll() {
-        return Lists.newArrayList(todoItemRepository.findAll());
+        return Lists.newArrayList(todoItemService.findAll());
     }
 
     @RequestMapping(value = "/put", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,14 +30,14 @@ public class TodoController {
     @ResponseBody
     public TodoItem save(@RequestBody TodoItem newTodoItem) {
         Preconditions.checkNotNull(newTodoItem);
-        return todoItemRepository.save(newTodoItem);
+        return todoItemService.save(newTodoItem);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable(value = "id") Long id) {
         Preconditions.checkNotNull(id);
-        todoItemRepository.delete(id);
+        todoItemService.delete(id);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -45,7 +46,7 @@ public class TodoController {
     public void update(@RequestBody TodoItem updateItem) {
         Preconditions.checkNotNull(updateItem);
         Preconditions.checkNotNull(updateItem.getId());
-        todoItemRepository.save(updateItem);
+        todoItemService.save(updateItem);
     }
 
     @RequestMapping(value = "/markAll/{completed}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,18 +54,18 @@ public class TodoController {
     @ResponseBody
     public List<TodoItem> markAll(@PathVariable(value = "completed") boolean completed) {
         Preconditions.checkNotNull(completed);
-        Iterable<TodoItem> items = todoItemRepository.findAll();
+        Iterable<TodoItem> items = todoItemService.findAll();
         items.forEach((item) -> item.setCompleted(completed));
-        todoItemRepository.save(items);
+        todoItemService.save(items);
 
         return Lists.newArrayList(items);
     }
 
-    public TodoItemRepository getTodoItemRepository() {
-        return todoItemRepository;
+    public TodoItemService getTodoItemService() {
+        return todoItemService;
     }
 
-    public void setTodoItemRepository(TodoItemRepository todoItemRepository) {
-        this.todoItemRepository = todoItemRepository;
+    public void setTodoItemService(TodoItemService todoItemService) {
+        this.todoItemService = todoItemService;
     }
 }

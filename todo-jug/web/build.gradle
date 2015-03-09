@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
+    }
+}
+
+apply plugin: 'spring-boot'
+
+
+jar {
+    into('static') {
+        from('src/main/webapp')
+    }
+    baseName = 'todojug'
+}
+
+dependencies {
+    compile project(":model")
+    compile project(":service")
+    runtime project(path: ':service', configuration: 'archives')
+    //compile project(":service").sourceSets.impl.output
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web")
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    // end::actuator[]
+
+
+}
+
+
+task createBuildInfoFile(dependsOn: processResources) << {
+    def buildInfoFile = new File("$buildDir/build-info.properties")
+    Properties props = new Properties()
+    props.setProperty('version', project.version.toString())
+    props.setProperty('timestamp', new Date().toString())
+    props.store(buildInfoFile.newWriter(), null)
+}
+
+createBuildInfoFile.onlyIf { project.hasProperty('isRelease') }
+assemble.dependsOn createBuildInfoFile

@@ -2,7 +2,8 @@
 ext.documentationDir = "documentation"
 ext.documentationBuildDir = "$buildDir/$documentationDir"
 ext.versionInfoFile = "$documentationBuildDir/versionInfo.txt"
-ext.version = "1.0.0"
+
+version = "1.0.0"
 
 task clean(type: Delete) {
 	delete buildDir

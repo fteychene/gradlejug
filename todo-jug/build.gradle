@@ -2,6 +2,11 @@ apply from: "$rootDir/gradle/versioning.gradle"
 apply from: "./libraries.gradle"
 
 
+ext {
+    modelProjects = ["model"]
+}
+
+
 subprojects { subProject ->
     apply plugin: 'java'
     apply from: "$rootDir/gradle/integrationTests.gradle"
@@ -30,8 +35,17 @@ subprojects { subProject ->
         mavenCentral()
     }
 
+    ext {
+        isModelProject = subProject.name in rootProject.modelProjects
+    }
+
     dependencies {
         compile libraries.guava
+
+        if (!isModelProject) {
+            compile libraries.spring
+            compile libraries.javaassist
+        }
         testCompile libraries.junit
     }
 

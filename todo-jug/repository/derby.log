@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Thu Feb 26 12:14:19 GMT+01:00 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014b-c598-2326-000002830fb0 
-on database directory memory:D:\Users\fteychen\Tools\gradle-workspace\todo-jug\repository\todojug with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
+Mon Mar 09 17:48:24 GMT+01:00 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014b-ff6f-f9a1-0000082658c8 
+on database directory memory:D:\Users\fteychen\Tools\gradle-workspace\todo-jug\todo-jug\repository\todojug with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
 Loaded from file:/C:/Users/fteychen/.gradle/caches/modules-2/files-2.1/org.apache.derby/derby/10.11.1.1/df4b50061e8e4c348ce243b921f53ee63ba9bbe1/derby-10.11.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_20-b26
-user.dir=D:\Users\fteychen\Tools\gradle-workspace\todo-jug\repository
+user.dir=D:\Users\fteychen\Tools\gradle-workspace\todo-jug\todo-jug\repository
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1
