@@ -11,9 +11,9 @@ class BuildVersionExtension {
     boolean isRelease = false
     String defaultVersion = "1.0.0"
 
-    private GitVersion gitVersion
+    private GitRepositoryInformation gitVersion
 
-    public setGitVersion(GitVersion gitVersion) {
+    public setGitVersion(GitRepositoryInformation gitVersion) {
         this.gitVersion = gitVersion
     }
 
@@ -31,7 +31,7 @@ class BuildVersionExtension {
             )
 
         } catch (Exception e) {
-            throw new GradleScriptException("Cannot suss a build version for you.\n\n" +
+            throw new GradleScriptException("Cannot setup a build version for you.\n\n" +
                     "Using:\n\n" +
                     "releaseTagPattern: \"" + releaseTagPattern + "\"\n" +
                     "matchGroup: \"" + matchGroup + "\"\n" +

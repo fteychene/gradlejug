@@ -4,11 +4,15 @@ apply from: "./libraries.gradle"
 
 subprojects { subProject ->
     apply plugin: 'java'
-    apply plugin: fr.fteychene.gradlejug.buildsrc.version.BuildVersionPlugin
     apply from: "$rootDir/gradle/integrationTests.gradle"
 
+    apply plugin: fr.fteychene.gradlejug.buildsrc.version.BuildVersionPlugin
+    // Publication
     apply plugin: 'maven-publish'
+    // Quality
     apply plugin: 'checkstyle'
+    apply plugin: "jacoco"
+    // Reports
     apply plugin: 'build-dashboard'
     apply plugin: 'project-report'
 
@@ -43,13 +47,15 @@ subprojects { subProject ->
         showViolations = false
         ignoreFailures = true
     }
-}
 
-//gradle.taskGraph.whenReady {taskGraph ->
-//    if (taskGraph.hasTask(release)) {
-//        projectVersions.release = true
-//    }
-//}
+    jacocoTestReport() {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination "${buildDir}/jacoco"
+        }
+    }
+}
 
 
 task wrapper(type: Wrapper) {

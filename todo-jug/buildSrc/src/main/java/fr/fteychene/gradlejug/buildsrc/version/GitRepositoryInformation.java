@@ -29,11 +29,11 @@ import java.util.regex.Pattern;
 /**
  * Methods to find build versions from a Git repo.
  */
-public class GitVersion {
+public class GitRepositoryInformation {
 
     private final String gitDir;
 
-    public GitVersion(String gitDir) {
+    public GitRepositoryInformation(String gitDir) {
         this.gitDir = gitDir;
     }
 
@@ -56,6 +56,7 @@ public class GitVersion {
         String version = null;
 
         String latestRelease = getLatestReleaseTag(releaseTagPattern);
+        System.out.println("Latest release tag found : "+latestRelease);
         if (latestRelease != null) {
             if (isRelease) {
                 version = releaseVersion(
@@ -82,9 +83,13 @@ public class GitVersion {
         return version;
     }
 
-
-    public String getGitDir() {
-        return gitDir;
+    public String getCurrentBranchName() throws IOException, GitAPIException {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        Repository repository = builder
+                .setWorkTree(new File(gitDir))
+                .findGitDir()
+                .build();
+        return repository.getBranch();
     }
 
     /**
@@ -99,7 +104,7 @@ public class GitVersion {
      * @throws java.io.IOException
      * @throws GitAPIException
      */
-    String getLatestReleaseTag(String releaseTagPattern) throws IOException, GitAPIException {
+    public String getLatestReleaseTag(String releaseTagPattern) throws IOException, GitAPIException {
 
         Pattern tagPattern = Pattern.compile(releaseTagPattern);
 
@@ -108,6 +113,8 @@ public class GitVersion {
                 .setWorkTree(new File(gitDir))
                 .findGitDir()
                 .build();
+
+
 
         RevWalk walk = new RevWalk(repository);
         walk.markStart(walk.parseCommit(repository.resolve("HEAD")));
@@ -146,61 +153,6 @@ public class GitVersion {
         return releaseTags.size() > 0 ? releaseTags.get(0) : null;
     }
 
-
-    /**
-     * @return the treeish of the head commit for the git repo.
-     * @throws java.io.IOException
-     * @throws GitAPIException
-     */
-    String headCommitTreeish() throws IOException, GitAPIException {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = builder
-                .setWorkTree(new File(gitDir))
-                .findGitDir()
-                .build();
-
-        Iterable<RevCommit> logs = new Git(repository).log()
-                .all()
-                .call();
-
-        return logs.iterator().next().getName();
-    }
-
-    /**
-     * @return the date time UTC now formatted like 20140415215719
-     */
-    String dateTimeUTC() {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyyMMddHHmmss");
-        DateTime dateTime = new DateTime().withZone(DateTimeZone.UTC);
-
-        return fmt.print(dateTime);
-    }
-
-    /**
-     * Finds a integration version number for the build.  If the build is running on snap the
-     * use the pipeline number.  Otherwise use the date time of the build.  Combines the snap
-     * pipeline number or the date time with a shortened git commit treeish.
-     *
-     * @return a string composed representing the build version.
-     * @throws java.io.IOException
-     * @throws GitAPIException
-     */
-    String integrationVersion() throws IOException, GitAPIException {
-
-        String prefix = "";
-
-        if ("true".equals(System.getenv("SNAP_CI"))) {
-            String snapBuildNumber = System.getenv("SNAP_PIPELINE_COUNTER");
-            if (snapBuildNumber != null && snapBuildNumber.matches("\\d+")) {
-                prefix = "snap" + snapBuildNumber;
-            }
-        } else {
-            prefix = dateTimeUTC();
-        }
-
-        return prefix + "_git" + headCommitTreeish().substring(0, 7);
-    }
-
     /**
      * Calculates the next snapshot version.
      * <p>
@@ -232,7 +184,7 @@ public class GitVersion {
     }
 
     /**
-     * Calculates the next snapshot version.
+     * Calculates the current snapshot version.
      * <p>
      * For example, given the releaseTag 'release-0.0.0' the following code will return the next snapshot version
      * '0.0.1-SNAPSHOT':
@@ -261,6 +213,10 @@ public class GitVersion {
 
     public String releaseVersion(String releaseTag, String releaseTagPattern, String matchGroup) {
         return releaseTag.replaceAll(releaseTagPattern, matchGroup);
+    }
+
+    public String getGitDir() {
+        return gitDir;
     }
 
 }

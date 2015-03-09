@@ -28,3 +28,15 @@ dependencies {
     // end::actuator[]
 
 }
+
+
+task createBuildInfoFile(dependsOn: processResources) << {
+    def buildInfoFile = new File("$buildDir/build-info.properties")
+    Properties props = new Properties()
+    props.setProperty('version', project.version.toString())
+    props.setProperty('timestamp', new Date().toString())
+    props.store(buildInfoFile.newWriter(), null)
+}
+
+createBuildInfoFile.onlyIf { project.hasProperty('isRelease') }
+assemble.dependsOn createBuildInfoFile
