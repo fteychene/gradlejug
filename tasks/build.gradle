@@ -1,35 +1,66 @@
 
-task task4 () {
-	onlyIf { Task task ->
-        task.actions.size() == 3
+ext.documentationDir = "documentation"
+ext.documentationBuildDir = "$buildDir/$documentationDir"
+ext.versionInfoFile = "$documentationBuildDir/versionInfo.txt"
+ext.version = "1.0.0"
+
+task clean(type: Delete) {
+	delete buildDir
+}
+
+task cleanDocumentation(type: Delete) {
+	delete documentationBuildDir
+}
+
+task versionInfo(type: VersionInfoToFileTask) {
+    destination = project.versionInfoFile
+	version = project.version
+}
+
+class VersionInfoToFileTask extends DefaultTask {
+
+    def destination
+	def version
+
+    File getDestination() {
+        project.file(destination)
     }
-} << {
-	 println "Coucou"
-	
+
+    @TaskAction
+    def versionInfo() {
+        def file = getDestination()
+        file.parentFile.mkdirs()
+        file.write "Documentation for gradle-jug tasks \nVersion : $version"
+    }
 }
 
-task4.doFirst {
-	println("First action of $it.name")
+task copyDocumentation(type: Copy) {
+    from documentationDir
+    into documentationBuildDir
 }
 
-task4.doLast {
-	println("Last action of $it.name")
+task assembleDocumentation(type: Zip) {
+	baseName = "gradlejug"
+	classifier = documentationDir
+	destinationDir = file("$buildDir/libs")
+	from documentationBuildDir
 }
 
-task task1 << {
-   println "Hello"
+
+
+task assemble(dependsOn: ['cleanDocumentation', 'versionInfo', 'copyDocumentation', 'assembleDocumentation']) << {
+	println "Assemble task"
 }
 
-task task2 << {
-   println "World"
-}
 
-task task3(dependsOn: 'task3dependency') << {
-   println "MRQBert"
-}
 
-task task3dependency << {
-   println "MR"
-}
 
-task tests(dependsOn: ['task4', 'task1', 'task2', 'task3'])
+
+/*
+
+
+	versionInfo.onlyIf { Task task ->
+        project.hasProperty('release')
+    }
+
+*/
