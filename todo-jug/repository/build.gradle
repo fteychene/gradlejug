@@ -43,7 +43,6 @@ dependencies {
 }
 
 dependencies {
-    compile project(':model')
     compile libraries.spring_data
     compile libraries.hibernate
     compile libraries.hsqldb

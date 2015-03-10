@@ -18,7 +18,6 @@ jar {
 }
 
 dependencies {
-    compile project(":model")
     compile project(":service")
     runtime project(path: ':service', configuration: 'impl')
     //compile project(":service").sourceSets.impl.output

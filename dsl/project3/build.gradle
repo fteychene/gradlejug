@@ -1,0 +1,13 @@
+
+
+dependencies {
+    compile module("org.codehaus.groovy:groovy:2.3.6") {
+        dependency("commons-cli:commons-cli:1.0") {
+            transitive = false
+        }
+        module(group: 'org.apache.ant', name: 'ant', version: '1.9.3') {
+            dependencies "org.apache.ant:ant-launcher:1.9.3@jar",
+                    "org.apache.ant:ant-junit:1.9.3"
+        }
+    }
+}

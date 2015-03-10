@@ -1,0 +1,68 @@
+
+
+ext {
+    classifier = null
+}
+
+configurations {
+    rootConfigurations
+}
+
+allprojects {
+    classifier = 'default'
+
+    configurations {
+        compile {
+            transitive = true
+        }
+        'default' {
+            extendsFrom compile
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects { subProject ->
+    subProject.ext.classifier = "$subProject.name"
+
+    dependencies {
+        compile 'org.apache.commons:commons-lang3:3.0'
+        compile 'org.apache.commons:commons-io:1.3.2'
+    }
+}
+
+task displayClassifier << {
+    allprojects.each {item ->
+        println "Classifier for  $item.name"
+        println item.classifier
+    }
+}
+
+task displayConfigurations << {
+    allprojects.each {item ->
+        println "Configuration for $item.name"
+        item.configurations.each {configurations ->
+            println configurations.name
+        }
+    }
+}
+
+task displayDependencies << {
+    allprojects.each {item ->
+        println "Dependencies for $item.name"
+        item.configurations.each {configurations ->
+            println configurations.name
+            configurations.dependencies.each {
+                dep -> println "$dep.group:$dep.name:$dep.version"
+            }
+        }
+    }
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

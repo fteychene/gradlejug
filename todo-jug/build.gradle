@@ -46,6 +46,7 @@ subprojects { subProject ->
         if (!isModelProject) {
             compile libraries.spring
             compile libraries.javaassist
+            compile project(':model')
         }
         testCompile libraries.junit
     }
