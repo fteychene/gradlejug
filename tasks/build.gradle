@@ -42,26 +42,8 @@ task copyDocumentation(type: Copy) {
 
 task assembleDocumentation(type: Zip) {
 	baseName = "gradlejug"
-	classifier = documentationDir
+	classifier = "documentation"
 	destinationDir = file("$buildDir/libs")
 	from documentationBuildDir
 }
 
-
-
-task assemble(dependsOn: ['cleanDocumentation', 'versionInfo', 'copyDocumentation', 'assembleDocumentation']) << {
-	println "Assemble task"
-}
-
-
-
-
-
-/*
-
-
-	versionInfo.onlyIf { Task task ->
-        project.hasProperty('release')
-    }
-
-*/

@@ -1,0 +1,7 @@
+task assemble(dependsOn: ['cleanDocumentation', 'versionInfo', 'copyDocumentation', 'assembleDocumentation']) << {
+    println "Assemble task"
+}
+
+versionInfo.onlyIf { Task task ->
+    project.hasProperty('release')
+}
