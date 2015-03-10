@@ -20,7 +20,7 @@ jar {
 dependencies {
     compile project(":model")
     compile project(":service")
-    runtime project(path: ':service', configuration: 'archives')
+    runtime project(path: ':service', configuration: 'impl')
     //compile project(":service").sourceSets.impl.output
     // tag::jetty[]
     compile("org.springframework.boot:spring-boot-starter-web")

@@ -1,12 +1,12 @@
 
 configurations {
-
+    impl.extendsFrom(compile)
 }
 
 sourceSets {
     impl {
         java.srcDir file('src/main/impl')
-        compileClasspath = sourceSets.main.output + configurations.compile
+        compileClasspath = sourceSets.main.output + configurations.impl + configurations.compile
         runtimeClasspath = output + configurations.runtime
     }
 }
@@ -18,10 +18,12 @@ dependencies {
 
 
 task implementationJar(type: Jar) {
-    classifier = 'Impl'
+    classifier = 'impl'
     from sourceSets.impl.output
 }
 
 artifacts {
-    archives implementationJar
+    impl implementationJar
 }
+
+build.dependsOn implementationJar
