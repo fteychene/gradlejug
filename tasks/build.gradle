@@ -1,49 +1,5 @@
 
-ext.documentationDir = "documentation"
-ext.documentationBuildDir = "$buildDir/$documentationDir"
-ext.versionInfoFile = "$documentationBuildDir/versionInfo.txt"
-
-version = "1.0.0"
-
-task clean(type: Delete) {
-	delete buildDir
+ext {
+    documentationDir = "documentation"
+    documentationBuildDir = "$buildDir/$documentationDir"
 }
-
-task cleanDocumentation(type: Delete) {
-	delete documentationBuildDir
-}
-
-task versionInfo(type: VersionInfoToFileTask) {
-    destination = project.versionInfoFile
-	version = project.version
-}
-
-class VersionInfoToFileTask extends DefaultTask {
-
-    def destination
-	def version
-
-    File getDestination() {
-        project.file(destination)
-    }
-
-    @TaskAction
-    def versionInfo() {
-        def file = getDestination()
-        file.parentFile.mkdirs()
-        file.write "Documentation for gradle-jug tasks \nVersion : $version"
-    }
-}
-
-task copyDocumentation(type: Copy) {
-    from documentationDir
-    into documentationBuildDir
-}
-
-task assembleDocumentation(type: Zip) {
-	baseName = "gradlejug"
-	classifier = "documentation"
-	destinationDir = file("$buildDir/libs")
-	from documentationBuildDir
-}
-

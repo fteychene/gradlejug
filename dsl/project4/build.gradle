@@ -1,0 +1,4 @@
+
+dependencies {
+    compile module("org.codehaus.groovy:groovy:2.3.6")
+}
