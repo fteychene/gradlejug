@@ -1,21 +1,20 @@
-
-
+//Extra properties
 ext {
-    classifier = 'default'
+    info = 'Information on root project'
 }
 
-configurations {
-    rootConfigurations
+task displayInfo << {
+    allprojects.each {item ->
+        println "Description for  $item.name"
+        println item.info
+    }
 }
 
+// Configurations
 allprojects {
-
     configurations {
         compile {
-            transitive true
-        }
-        'default' {
-            extendsFrom compile
+            transitive = true
         }
     }
 
@@ -24,8 +23,21 @@ allprojects {
     }
 }
 
+configurations {
+    rootConfigurations
+}
+
+task displayConfigurations << {
+    allprojects.each {item ->
+        println "Configuration for $item.name"
+        item.configurations.each({configurations ->
+            println configurations.name
+        })
+    }
+}
+
+// Dependencies
 subprojects { subProject ->
-    subProject.ext.classifier = "$subProject.name"
 
     dependencies {
         compile 'org.apache.commons:commons-lang3:3.0'
@@ -33,36 +45,15 @@ subprojects { subProject ->
     }
 }
 
-task displayClassifier << {
-    allprojects.each {item ->
-        println "Classifier for  $item.name"
-        println item.classifier
-    }
-}
-
-task displayConfigurations << {
-    allprojects.each {item ->
-        println "Configuration for $item.name"
-        item.configurations.each {configurations ->
-            println configurations.name
-        }
-    }
-}
-
 task displayDependencies << {
     allprojects.each {item ->
         println "Dependencies for $item.name"
-        item.configurations.each {configurations ->
+        item.configurations.each({configurations ->
             println configurations.name
             configurations.dependencies.each {
                 dep -> println "$dep.group:$dep.name:$dep.version"
             }
-            println ''
-        }
+        })
     }
 
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
 }

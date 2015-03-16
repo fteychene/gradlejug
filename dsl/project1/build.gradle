@@ -1,9 +1,0 @@
-
-ext {
-    property = 'Project1 property'
-}
-
-dependencies {
-    compile ('com.google.guava:guava:18.0')
-    compile 'commons-collections:commons-collections:3.2.1'
-}
