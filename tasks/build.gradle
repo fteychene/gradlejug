@@ -13,19 +13,19 @@ task cleanDocumentation(type: Delete) {
     delete "$buildDir/libs/gradlejug-documentation.zip"
 }
 
-task copyDocumentation(type: Copy, dependsOn: cleanDocumentation) {
+task copyDocumentation(type: Copy) {
     from documentationDir
     into documentationBuildDir
 }
 
-task assembleDocumentation(type: Zip, dependsOn: ['copyDocumentation', 'versionInfo']) {
+task assembleDocumentation(type: Zip) {
     destinationDir = file( "$buildDir/libs")
     baseName = "gradlejug"
     classifier = "documentation"
     from documentationBuildDir
 }
 
-// ------------------------- Version info
+/* ------------------------- Version info
 
 // Gestion d'un version info
 task versionInfo(type : VersionInfoToFileTask) {
@@ -55,8 +55,9 @@ class VersionInfoToFileTask extends DefaultTask {
         file.write "Documentation for gradle-jug tasks \nVersion : $version"
     }
 }
+*/
 
-// ------------------------- Cow affichage
+/* ------------------------- Cow affichage
 
 task cow << {
     println ''
@@ -99,6 +100,7 @@ task cow << {
     println '             **'
     println ''
 }
+*/
 
 /*
 cleanDocumentation.dependsOn cow

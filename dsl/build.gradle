@@ -1,10 +1,8 @@
-//Extra properties
-ext {
-    info = 'Information on root project'
-}
 
 // ------------------------- Configurations
+
 allprojects {
+
     configurations {
         compile {
             transitive = true
@@ -25,8 +23,10 @@ task displayConfigurations << {
     }
 }
 
-// ------------------------- Dependencies
+/* ------------------------- Dependencies
 subprojects { subProject ->
+
+    //if (subProject.name == "project2") return
 
     dependencies {
         compile 'org.apache.commons:commons-lang3:3.0'
@@ -34,15 +34,4 @@ subprojects { subProject ->
     }
 }
 
-task displayDependencies << {
-    allprojects.each {item ->
-        println "Dependencies for $item.name"
-        item.configurations.each({configurations ->
-            println configurations.name
-            configurations.dependencies.each {
-                dep -> println "$dep.group:$dep.name:$dep.version"
-            }
-        })
-    }
-
-}
+*/
