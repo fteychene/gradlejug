@@ -1,5 +1,107 @@
 
+// Extra properties
 ext {
     documentationDir = "documentation"
     documentationBuildDir = "$buildDir/$documentationDir"
 }
+
+// Version (gradle project property)
+version = "1.0.0.Final"
+
+task cleanDocumentation(type: Delete) {
+    delete documentationBuildDir
+    delete "$buildDir/libs/gradlejug-documentation.zip"
+}
+
+task copyDocumentation(type: Copy, dependsOn: cleanDocumentation) {
+    from documentationDir
+    into documentationBuildDir
+}
+
+task assembleDocumentation(type: Zip, dependsOn: ['copyDocumentation', 'versionInfo']) {
+    destinationDir = file( "$buildDir/libs")
+    baseName = "gradlejug"
+    classifier = "documentation"
+    from documentationBuildDir
+}
+
+// ------------------------- Version info
+
+// Gestion d'un version info
+task versionInfo(type : VersionInfoToFileTask) {
+    destination "$documentationBuildDir/versionInfo.txt"
+    version project.version
+}
+
+// Restreindre d'appel à la tâche versionInfo a la présence d'une property release
+versionInfo.onlyIf {
+    project.hasProperty('release')
+}
+
+// Définition d'une tâche version info réutilisable
+class VersionInfoToFileTask extends DefaultTask {
+
+    def destination
+    def version
+
+    File getDestination() {
+        project.file(destination)
+    }
+
+    @TaskAction
+    def versionInfo() {
+        def file = getDestination()
+        file.parentFile.mkdirs()
+        file.write "Documentation for gradle-jug tasks \nVersion : $version"
+    }
+}
+
+// ------------------------- Cow affichage
+
+task cow << {
+    println ''
+    println '                                                           >*'
+    println '                                                    #      >*'
+    println '                                                    #  ###>***~~~~~|'
+    println '                                                    ####  *****^^^#'
+    println '                                               _____|       *#####'
+    println '                                              | ^^^#   \\/ \\/ #'
+    println '                                             ##^^###         |'
+    println '                                              ### ##*        *'
+    println '  |_                                ********~~|_____>         *'
+    println '  \\|_                 ________************        #>>***    ***'
+    println '  \\\\|_             __|     *************        ## >>>*  *****'
+    println '  |___  |______   __|         ***********       ##>### ^^^^^^^^^^'
+    println '     |____    |__|           **********       >>>>## ^<^^^^^@^^^^^'
+    println '          #          ***      ********      **>>>># ^<^^@^^^@^^^^^'
+    println '           #      ***********    ******     *>>>## ^<<^^^^^^^^<<<'
+    println '           #      ***********    ******    **>>>## ^<<<<^^^<<<<<'
+    println '          #        *********      ****   ***>>>#### ^<<<<<<<<<'
+    println '          #         **********          ****>>>###### <<<<<'
+    println '          ##        **********          ****>>>>##      ##'
+    println '          ##         **  ***             ****>>>>        #     ##XXX'
+    println '          ##**                            *******         ##>>>>#XX'
+    println '           >>*                             ******         #######XXX'
+    println '           >>*****                           ***         ##__'
+    println '            >>*****   **** ***               **    *****     \\__'
+    println '            >># **    *********              *********>>>#      XXX'
+    println '            ##        *********              *******>>>>>##     XXX'
+    println '         |~~           ********                 *>>>>> >#######XXX'
+    println '     X~~~~ ###          *********          ######>          >>>XXXX'
+    println '   XXX  #>>>##          ********>>##  #######'
+    println '    XXX#>      #   ##>>>>>>>>>>>>>###UUUUU^^'
+    println '    XXX        #  ####>>>>>>>>>>UUUUUUUUU^^'
+    println '               #  >>           UUUUUU^^^<()'
+    println '              #  >              U()^<()  ()'
+    println '            *#  *>               ()  ()'
+    println '           **** #'
+    println '             ***'
+    println '             **'
+    println ''
+}
+
+/*
+cleanDocumentation.dependsOn cow
+copyDocumentation.dependsOn cow
+assembleDocumentation.dependsOn cow
+ */

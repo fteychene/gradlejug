@@ -1,3 +1,4 @@
+// Ajout d'une configuration de source spéciale pour le plugin spring-boot
 buildscript {
     repositories {
         mavenCentral()
@@ -6,10 +7,9 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
     }
 }
-
 apply plugin: 'spring-boot'
 
-
+// Configuration specifique pour Spring-boot (resources web -> resources/static)
 jar {
     into('static') {
         from('src/main/webapp')
@@ -18,27 +18,12 @@ jar {
 }
 
 dependencies {
+    // Dépendance sur les interfaces de service
     compile project(":service")
+    // Au runtime dépendance sur l'artefact d'implémentation du projet service
     runtime project(path: ':service', configuration: 'impl')
-    //compile project(":service").sourceSets.impl.output
-    // tag::jetty[]
+
+    // Springboot specific
     compile("org.springframework.boot:spring-boot-starter-web")
-    // end::jetty[]
-    // tag::actuator[]
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    // end::actuator[]
-
-
 }
-
-
-task createBuildInfoFile(dependsOn: processResources) << {
-    def buildInfoFile = new File("$buildDir/build-info.properties")
-    Properties props = new Properties()
-    props.setProperty('version', project.version.toString())
-    props.setProperty('timestamp', new Date().toString())
-    props.store(buildInfoFile.newWriter(), null)
-}
-
-createBuildInfoFile.onlyIf { project.hasProperty('isRelease') }
-assemble.dependsOn createBuildInfoFile

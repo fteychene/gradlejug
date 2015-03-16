@@ -33,15 +33,18 @@ dependencies {
 
 */
 
+// Etendre compile pour la configuration des tests d'integration
 configurations {
     integrationCompile.extendsFrom(testCompile)
 }
 
+// Ajout des dépendances pour les tests d'intégration
 dependencies {
     integrationRuntime libraries.h2
     integrationRuntime libraries.derby
 }
 
+// Gestion des dépandances du projet
 dependencies {
     compile libraries.spring_data
     compile libraries.hibernate

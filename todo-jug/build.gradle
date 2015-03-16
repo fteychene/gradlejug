@@ -1,15 +1,16 @@
+// Import des librairies comme
 apply from: "./libraries.gradle"
 
-
+// Extra properties
 ext {
     modelProjects = ["model"]
 }
 
-
+// Gestion commune des projets
 subprojects { subProject ->
     apply plugin: 'java'
+    // Custom (test intégration + gestion version)
     apply from: "$rootDir/gradle/integrationTests.gradle"
-
     apply plugin: fr.fteychene.gradlejug.buildsrc.version.BuildVersionPlugin
     // Publication
     apply plugin: 'maven-publish'
@@ -23,22 +24,24 @@ subprojects { subProject ->
     defaultTasks 'build'
 
     sourceCompatibility = 1.8
-
-    buildVersion {
-        defaultVersion = "1.0.0"
-    }
-
     group = "fr.fteychene.gradlejug"
     version = buildVersion.version
-
-    repositories {
-        mavenCentral()
-    }
 
     ext {
         isModelProject = subProject.name in rootProject.modelProjects
     }
 
+    // Configuration du plugin custom BuildVersionPlugin
+    buildVersion {
+        defaultVersion = "1.0.0"
+    }
+
+    // Gestion repositories
+    repositories {
+        mavenCentral()
+    }
+
+    // Dependances communes à tous les projets
     dependencies {
         compile libraries.guava
 
@@ -50,12 +53,14 @@ subprojects { subProject ->
         testCompile libraries.junit
     }
 
+    // Ajout d'un log pour le run des tests
     test {
         beforeTest { descriptor ->
             logger.lifecycle("Running test: " + descriptor)
         }
     }
 
+    // Configuration checkstyle
     checkstyle {
         sourceSets = [subProject.sourceSets.main]
         configFile = rootProject.file('shared/config/checkstyle/checkstyle.xml')
@@ -63,6 +68,7 @@ subprojects { subProject ->
         ignoreFailures = true
     }
 
+    // Configuration jacoco
     jacocoTestReport() {
         reports {
             xml.enabled false
@@ -70,6 +76,7 @@ subprojects { subProject ->
             html.destination "${buildDir}/jacoco"
         }
     }
+    check.dependsOn jacocoTestReport
 }
 
 

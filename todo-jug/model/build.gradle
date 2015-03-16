@@ -1,5 +1,7 @@
+// Module multi langage -> java/groovy
 apply plugin: 'groovy'
 
+// Dépendances
 dependencies {
     compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.0.Final'
     compile "org.codehaus.groovy:groovy-all:2.1.5"

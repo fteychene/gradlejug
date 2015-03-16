@@ -1,5 +1,48 @@
+//Extra properties
+ext {
+    info = 'Information on root project'
+}
 
+// ------------------------- Configurations
+allprojects {
+    configurations {
+        compile {
+            transitive = true
+        }
+    }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    repositories {
+        mavenCentral()
+    }
+}
+
+task displayConfigurations << {
+    allprojects.each {item ->
+        println "Configuration for $item.name"
+        item.configurations.each({configurations ->
+            println configurations.name
+        })
+    }
+}
+
+// ------------------------- Dependencies
+subprojects { subProject ->
+
+    dependencies {
+        compile 'org.apache.commons:commons-lang3:3.0'
+        compile 'org.apache.commons:commons-io:1.3.2'
+    }
+}
+
+task displayDependencies << {
+    allprojects.each {item ->
+        println "Dependencies for $item.name"
+        item.configurations.each({configurations ->
+            println configurations.name
+            configurations.dependencies.each {
+                dep -> println "$dep.group:$dep.name:$dep.version"
+            }
+        })
+    }
+
 }

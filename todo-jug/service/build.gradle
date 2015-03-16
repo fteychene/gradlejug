@@ -1,8 +1,12 @@
+// ---------------- Multi artifact
+// Ajout d'un nouvel artefact impl
 
+// Ajout d'une configuration nécessiare pour la production d'un artefact
 configurations {
     impl
 }
 
+// Définition du sourceSet pour le 2° artefact
 sourceSets {
     impl {
         java.srcDir file('src/main/impl')
@@ -11,18 +15,21 @@ sourceSets {
     }
 }
 
-dependencies {
-    compile project(":repository")
-}
-
-
+// Tache responsable de la production du jar impl
 task implementationJar(type: Jar) {
     classifier = 'impl'
     from sourceSets.impl.output
 }
 
+// Configuration artefact supplémentaire --> conf task production
 artifacts {
     impl implementationJar
 }
 
 assemble.dependsOn implementationJar
+
+
+// ---------------- Gestion des dépendances
+dependencies {
+    compile project(":repository")
+}
