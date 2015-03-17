@@ -26,7 +26,7 @@ task displayConfigurations << {
 /* ------------------------- Dependencies
 subprojects { subProject ->
 
-    //if (subProject.name == "project2") return
+    //if (subProject.name == "project1") return
 
     dependencies {
         compile 'org.apache.commons:commons-lang3:3.0'
